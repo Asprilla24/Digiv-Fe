@@ -27,21 +27,71 @@ export default function modalTestDrive(props) {
 								</div>
 								{/*body*/}
 								<div className='  modal-car-content overflow-x-hidden overflow-y-auto p-6 flex-auto grid gap-4 grid-cols-1'>
-									<div className='modal-content-img'>
-										<img src='https://cdn.rentalmobilbali.net/wp-content/uploads/2019/02/Harga-Avanza-Baru-Facelift-Feature-Image-1024x576.jpg'></img>
-									</div>
-									<div>
-										<p className='text-gray-600 text-lg leading-relaxed'>
-											I always felt like I could do anything. That’s the main
-											thing people are controlled by! Thoughts- their perception
-											of themselves! They're slowed down by their perception of
-											themselves. If you're taught you can’t do anything, you
-											won’t do anything. I was taught I could do everything.
-										</p>
-									</div>
-								</div>
+                                    <div class="flex flex-wrap -mx-3 mb-6">
+                                        <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+                                        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
+                                            First Name
+                                        </label>
+                                        <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-first-name" type="text" placeholder="Jane" />
+                                        </div>
+                                        <div class="w-full md:w-1/2 px-3">
+                                        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
+                                            Last Name
+                                        </label>
+                                        <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text" placeholder="Doe" />
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-wrap -mx-3 mb-6">
+                                        <div class="w-full px-3">
+                                        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-password">
+                                            Email
+                                        </label>
+                                        <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" type="email" placeholder="john.doe@mail.com" />
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-wrap -mx-3 mb-6">
+                                        <div class="w-full px-3">
+                                        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-password">
+                                            Phone
+                                        </label>
+                                        <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" type="phone" placeholder="081234567890" />
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-wrap -mx-3 mb-2">
+                                        <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+                                            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-city">
+                                                Merk
+                                            </label>
+                                            <div class="relative">
+                                                <select class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
+                                                    <option>Honda</option>
+                                                    <option>Suzuki</option>
+                                                    <option>Toyota</option>
+                                                </select>
+                                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+                                            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
+                                                Tipe
+                                            </label>
+                                            <div class="relative">
+                                                <select class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
+                                                    <option>Jazz</option>
+                                                    <option>H-RV</option>
+                                                    <option>C-RV</option>
+                                                </select>
+                                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                                                </div>
+                                            </div>
+                                        </div>
+								    </div>
+                                </div>
 								{/*footer*/}
-								<div className='grid grid-flow-col grid-cols-3 grid-rows-2 gap-1 modal-car-footer p-6 border-t border-solid border-gray-300 rounded-b'>
+								<div className='grid grid-flow-col grid-cols-1 grid-rows-1 gap-1 modal-car-footer p-6 border-t border-solid border-gray-300 rounded-b'>
 							
 
 									<button
@@ -49,35 +99,7 @@ export default function modalTestDrive(props) {
 										type='button'
 										style={{ transition: "all .15s ease" }}
 										onClick={onClose}>
-										Unduh Brosur
-									</button>
-									<button
-										className='bg-green-500 text-white active:bg-green-600  uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1'
-										type='button'
-										style={{ transition: "all .15s ease" }}
-										onClick={onClose}>
-										Test Drive
-									</button>
-									<button
-										className='bg-green-500 text-white active:bg-green-600 uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1'
-										type='button'
-										style={{ transition: "all .15s ease" }}
-										onClick={onClose}>
-											trade in
-									</button>
-									<button
-										className='bg-green-500 text-white active:bg-green-600  uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1'
-										type='button'
-										style={{ transition: "all .15s ease" }}
-										onClick={onClose}>
-											Brousur
-									</button>
-									<button
-										className='bg-green-500 text-white active:bg-green-600 uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1'
-										type='button'
-										style={{ transition: "all .15s ease" }}
-										onClick={onClose}>
-											live chat
+										Submit
 									</button>
 								</div>
 							</div>
