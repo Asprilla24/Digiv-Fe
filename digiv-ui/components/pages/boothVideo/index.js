@@ -47,7 +47,7 @@ export default function MainHall() {
 							muted='muted'
 							loop='loop'>
 							<source
-								src='http://34.107.209.44/booth/video/MAZDA_booth.mp4'
+								src={`${ENV.ASSETS_URL}booth/video/MAZDA_booth.mp4`}
 								type='video/mp4'
 							/>
 						</video>

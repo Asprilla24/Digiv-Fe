@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
         - name: digiv-fe
-          image: "asia.gcr.io/adiravirtualexpo/digivapp.fe:0.0.7-dev"
+          image: "asia.gcr.io/adiravirtualexpo/digivapp.fe:0.0.10-dev"
           imagePullPolicy: Always
           ports:
             - containerPort: 80

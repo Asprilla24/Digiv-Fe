@@ -1,56 +1,63 @@
-import React, { Component } from "react";
-import cookie from "js-cookie";
+import React from "react";
 import Router from "next/router";
-import ModalLoading from "@components/element/modalLoading";
+import nookies,{destroyCookie } from "nookies";
+import digivApiServices from "@utils/httpRequest";
 
-function getRedirectTo() {
-	if (typeof window !== "undefined" && window.location) {
-		return window.location;
+const login = "/login"; // Define your login route address.
+
+const getAuthData = async (ctx) => {
+	const { digivApi } = digivApiServices(ctx);
+	const isUserLoggedIn = ctx.req.cookies["ATT"] && ctx.req.cookies["ART"];
+	if (!isUserLoggedIn) {
+		return null;
 	}
-	return {};
-}
+	try {
+		const getDataUser = await digivApi.get(`api/user/${ctx.req.cookies["AEU"]}`, {
+			headers: {
+				authorization: `Bearer ${ctx.req.cookies["ATT"]}`,
+			},
+		});
+		const {
+			data: { data },
+		} = getDataUser;
+		if (data) {
+			return data;
+		}
+	} catch (e) {
+    console.log(e)
+  }
+	return null;
+};
 
-export default function withAuth(AuthComponent) {
-	return class Authenticated extends Component {
-		static async getInitialProps(ctx) {
-			// Ensures material-ui renders the correct css prefixes server-side
-			let userAgent;
-			if (process.browser) {
-				userAgent = navigator.userAgent;
+const WrappedComponent = (Component) => {
+	const hocComponent = ({ ...props }) => <Component {...props} />;
+
+	hocComponent.getInitialProps = async (ctx) => {
+		const isUserLoggedIn = ctx.req.cookies["ATT"]
+		const authData = await getAuthData(ctx);
+
+		if (!isUserLoggedIn && !authData ) {
+			// Handle server-side and client-side rendering.
+			  nookies.destroy(ctx, 'ATT')
+			  nookies.destroy(ctx, 'ART')
+
+			if (ctx.res) {
+				ctx.res?.writeHead(302, {
+					Location: login,
+				});
+				ctx.res?.end();
 			} else {
-				userAgent = ctx.req.headers["user-agent"];
+				Router.replace(login);
 			}
-
-			// Check if Page has a `getInitialProps`; if so, call it.
-			const pageProps =
-				AuthComponent.getInitialProps &&
-				(await AuthComponent.getInitialProps(ctx));
-			// Return props.
-			return { ...pageProps, userAgent };
+		} else if (WrappedComponent.getInitialProps) {
+			const wrappedProps = await WrappedComponent.getInitialProps({});
+			return { ...wrappedProps, auth: authData };
 		}
 
-		constructor(props) {
-			super(props);
-			this.state = {
-				isLoading: true,
-			};
-		}
-
-		componentDidMount() {
-			if (!cookie.get("ATT")) {
-				Router.push("/login");
-			}
-			this.setState({ isLoading: false });
-		}
-
-		render() {
-            const {isLoading} = this.state
-			return (
-				<>
-					{isLoading ? (<ModalLoading isShowLoading={isLoading}/>) : (<AuthComponent {...this.props} />)}
-					
-				</>
-			);
-		}
+		return { test: "asdasdasd", auth: authData };
 	};
-}
+
+	return hocComponent;
+};
+
+export default WrappedComponent;

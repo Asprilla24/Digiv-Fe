@@ -8,6 +8,7 @@ import {ModalTestDrive} from "@components/element/modal";
 import {ModalBooking} from "@components/element/modal";
 import { useRouter } from "next/router";
 import ReactPlayer from "react-player";
+import  ScreenView from './view/screenView'
 //import { firebase } from "@utils/firebase";
 
 export default function ConferenceRoom() {
@@ -103,15 +104,11 @@ export default function ConferenceRoom() {
 
 			<main id='virutal-main' className='booth-video-main'>
 					<div id='video-booth' className='' style={styleVideo}>
-					<img class="bg-image" src={imageBooth} />
-					<div class="videoplayer">
-                        <ReactPlayer
-                            playing={true}
-                            width="100%"
-                            height="100%"
-                            url="https://youtu.be/F3fkV8o6mjw"
-                        />
-                    </div>
+					<img src={imageBooth} />
+					<ScreenView />
+					<div className='zoom-link zoom-link__1' onClick={()=>onClickBoot('zoom')} class="click-zoom" />
+					<div className='rundown-link rundown-link__1' onClick={()=>onClickBoot('rundown')} class="click-rundown" />
+
 						{/* <video
 							playsInline='playsInline'
 							autoPlay='autoplay'
@@ -131,6 +128,8 @@ export default function ConferenceRoom() {
 						isShow={shoModalCar}
 						onClose={() => setShowModalCar(false)}
 					/>
+					<ModalBooking isShow={showModalBooking} onClose={(e)=>prosesModal(e, "booking")} />
+					<ModalTestDrive isShow={showModalTestDrive} onClose={(e)=>prosesModal(e, "test-drive")} />
 			</main>
 		</DefaultLayout>
 	);

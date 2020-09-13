@@ -51,3 +51,52 @@
     //z-index: -1;
     //position:absolute;
 }
+
+@import "../components/modalDetailCar.scss";
+
+.screen-link {
+    cursor: pointer;
+    position: absolute;
+    top: 10%;
+    left: 61%;
+    z-index: 10;
+
+    &.screen-link__1 {
+        margin-left: -32%;
+        margin-top: 7%;
+        width: 42%;
+        height: 48%;
+    }
+}
+
+.zoom-link {
+    cursor: pointer;
+    position: absolute;
+    top: 20%;
+    left: 48%;
+    z-index: 10;
+
+    &.zoom-link__1 {
+        margin-left: -32%;
+        margin-top: 7%;
+        width: 10%;
+        height: 20%;
+    }
+}
+
+.rundown-link {
+    cursor: pointer;
+    position: absolute;
+    top: 20%;
+    left: 106%;
+    z-index: 10;
+
+    &.rundown-link__1 {
+        margin-left: -32%;
+        margin-top: 7%;
+        width:10%;
+        height:20%;
+    }
+}
+
+

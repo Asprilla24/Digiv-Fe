@@ -44,7 +44,7 @@ export default function formReservation(props) {
 		} catch (err) {
 			throw err;
 		}
-	}, 1500);
+	}, 500);
 
 	const handelChangeCity = debounce(async (provinceId, keyword) => {
 		const searchKeyword = keyword;
@@ -88,13 +88,6 @@ export default function formReservation(props) {
 										/>
 
 										<FormField
-											name='email'
-											label='Email Address'
-											placeholder='input Email'
-											className='mb-4'
-											withLabel={false}
-										/>
-										<FormField
 											name='nomer_telp'
 											label='Nomer Telepon'
 											type='numberphone'
@@ -133,6 +126,13 @@ export default function formReservation(props) {
 											onChange={(e) => {
 												handelChangeCity(values.province, e);
 											}}
+										/>
+										<FormField
+											name='email'
+											label='Email Address'
+											placeholder='input Email'
+											className='mb-4'
+											withLabel={false}
 										/>
 
 										<FormField

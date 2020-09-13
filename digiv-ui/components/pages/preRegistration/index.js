@@ -1,6 +1,6 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import "@styles/pages/preRegistration.scss";
-import { auth, firebase } from "@utils/firebase";
+import loadFirebase from "@utils/firebase";
 import { useRouter } from "next/router";
 import FormRegister from "./view/formRegister";
 import FormReservation from "./view/formReservation";
@@ -10,6 +10,7 @@ import { ModalAlert, ModalContext } from "@components/element/modal";
 import logoDanamon from "@assets/images/logo/logo-danamon.png";
 import logoAdira from "@assets/images/logo/logo-adira.png";
 import logoAdiraAnniv from "@assets/images/logo/logo-adira-anniv.png";
+// import  ChatBox  from "@components/element/chatBox";
 
 export default function PreRegistration() {
 	const { digivApi } = digivApiServices();
@@ -19,11 +20,14 @@ export default function PreRegistration() {
 	const [errorRegistration, setErrorRegistration] = useState({});
 	const [errorReservation, setErrorReservation] = useState({});
 	const openModalContext = useContext(ModalContext);
+	const [firebaseApp, setFirebaseApp] = useState(null);
 
-	const onClickSignInGoogle = () => {
+	const onClickSignInGoogle = async () => {
+		// const firebaseInstance = await loadFireBase ()
+
 		setShowModalLoading(true);
 
-		const provider = new firebase.auth.GoogleAuthProvider();
+		const provider = new fire.auth.GoogleAuthProvider();
 		auth
 			.signInWithPopup(provider)
 			.then((result) => {
@@ -52,8 +56,8 @@ export default function PreRegistration() {
 	};
 
 	const onClickFacebook = () => {
-		const provider = new firebase.auth.FacebookAuthProvider();
-
+		const auth = fire.auth();
+		const provider = new fire.auth.FacebookAuthProvider();
 		auth
 			.signInWithPopup(provider)
 			.then(function (result) {
@@ -154,6 +158,29 @@ export default function PreRegistration() {
 		}
 	};
 
+	// useEffect(() => {
+	// 	if (window !== undefined) {
+	// 		setFirebaseApp(loadFirebase())
+	// 	}
+	// }, []);
+
+	// useEffect(() => {
+	// 	if(firebaseApp){
+	// 		const  db = firebaseApp.firestore
+	// 		db.collection("user").add({
+	// 			first: "Ada",
+	// 			last: "Lovelace",
+	// 			born: 1815
+	// 		})
+	// 		.then(function(docRef) {
+	// 			console.log("Document written with ID: ", docRef.id);
+	// 		})
+	// 		.catch(function(error) {
+	// 			console.error("Error adding document: ", error);
+	// 		});
+	// 	}
+	// }, [firebaseApp]);
+
 	return (
 		<>
 			<div className='font-sans antialiased bg-grey-lightest w-full h-full'>
@@ -171,7 +198,7 @@ export default function PreRegistration() {
 				</div>
 				<div>
 					<img
-						className='absolute top-0 right-0 w-6/12 xl:w-4/12 lg:w-4/12'
+						className='absolute top-0 right-0 w-6/12 xl:w-2/12 lg:w-2/12 md:w-2/12 sm:w-4/12'
 						src={logoAdira}></img>
 				</div>
 				<div className='w-full  grid grid-cols-1  sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2'>
@@ -181,28 +208,28 @@ export default function PreRegistration() {
 					</div> */}
 					</div>
 					<div className='h-full lg:min-h-screen xl:min-h-screen w-12/12 flex justify-center pre-registration__container-form lg:items-end lg:align-end  xl:items-end xl:align-end'>
-						{dataUser ? (
-							<FormReservation
-								errorReservation={errorReservation}
-								onSubmitReservation={onSubmitReservation}
-								dataUser={dataUser}
-							/>
-						) : (
+						{/* {dataUser ? ( */}
+						<FormReservation
+							errorReservation={errorReservation}
+							onSubmitReservation={onSubmitReservation}
+							dataUser={dataUser}
+						/>
+						{/* ) : (
 							<FormRegister
 								onClickSignInGoogle={onClickSignInGoogle}
 								onClickFacebook={onClickFacebook}
 								onSubmitRegistration={onSubmitRegistration}
 								errorRegistration={errorRegistration}
 							/>
-						)}
+						)} */}
 					</div>
 				</div>
-
+				{/* <ChatBox messages={messages} /> */}
 				<ModalLoading isShowLoading={showModalLoading} />
 			</div>
 			<div className='logo-sponsor hidden lg:block xl:block md:hidden sm:hidden absolute bottom-0 left-0'>
-				<p className='text-xl text-white my-2'> di sponsori oleh : </p>
-				<img className='w-12/12' src={logoDanamon}></img>
+				<p className='text-xl text-white my-2'> disponsori oleh : </p>
+				<img className='w-6/12' src={logoDanamon}></img>
 			</div>
 		</>
 	);

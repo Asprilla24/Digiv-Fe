@@ -1,6 +1,7 @@
 FROM nginx:1.18-alpine
 
 ARG service 
+ARG environment 
 
 # Set working directory
 WORKDIR /usr/app
@@ -37,9 +38,10 @@ RUN pip3 install git+https://github.com/Supervisor/supervisor && \
     yarn install && \
     yarn transpile && \
     yarn cache clean && \
-    yarn workspace @digivfe/${service} build:prod
+    yarn workspace @digivfe/${service} build:${environment}
 
 COPY _build/Supervisord/${service}.conf ./supervisor.conf
+RUN sed -i "s#{{ENVIRONMENT}}#${environment}#g" ./supervisor.conf
 
 RUN mkdir -p /var/log/supervisor
 

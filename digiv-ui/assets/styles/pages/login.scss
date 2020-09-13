@@ -30,6 +30,35 @@
 }
 
 
+.fullscreen-bg-information {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow: hidden;
+    z-index: 2;
+    max-width: none;
+
+}
+
+.fullscreen-bg-information__video {
+    position: absolute;
+    left: 50%;
+    /* % of surrounding element */
+    top: 50%;
+    // transform: translate(-50%, -50%);
+    max-width: none;
+    transform: translate(-50%, -50%);
+    height: 100%;
+    width: 177.77777778vh; /* 100 * 16 / 9 */
+    min-width: 100%;
+    min-height: 56.25vw; /* 100 * 9 / 16 */
+
+
+}
+
+
 .fullscreen-bg {
     position: fixed;
     top: 0;
@@ -44,38 +73,41 @@
 
 .fullscreen-bg__video {
     position: absolute;
-    left: 50%; /* % of surrounding element */
     top: 50%;
+    left: 50%; /* % of surrounding element */
+
     // transform: translate(-50%, -50%);
+    height: 100%;
+    width: 177.77777778vh; /* 100 * 16 / 9 */
+    min-width: 100%;
+    min-height: 56.25vw; /* 100 * 9 / 16 */
     max-width: none;
-    transform: translate(-75%, -40%);
+    transform: translate(-50%, -50%);
 
 
-    @media (min-width:$screen-xl) {
-        transform: translate(-50%, -50%);
+    // @media (min-width:$screen-xl) {
+    //     transform: translate(-50%, -50%);
+    //     // object-position: 100% 64%;
+    // }
 
-        // object-position: 100% 64%;
-    }
+    // @media (min-width:$screen-lg) and (max-width:$screen-xl) {
+    //     transform: translate(-50%, -50%);
 
-    @media (min-width:$screen-lg) and (max-width:$screen-xl) {
-        transform: translate(-54%, -50%);
+    //     // height: 90vh;
 
-        // height: 90vh;
+    //     // object-position: 100% 64%;
+    // }
 
-        // object-position: 100% 64%;
-    }
+    // @media (min-width:$screen-md) and (max-width:$screen-lg) {
+    //     transform: translate(-50%, -50%);
 
-    @media (min-width:$screen-md) and (max-width:$screen-lg) {
-        transform: translate(-75%, -50%);
+    //     // height: 90vh;
 
-        // height: 90vh;
+    // }
 
-    }
-
-    @media (min-width:$screen-sm) and (max-width:$screen-md) {
-        transform: translate(-75%, -50%);
-
-    }
+    // @media (min-width:$screen-sm) and (max-width:$screen-md) {
+    //     transform: translate(-50%, -50%);
+    // }
 
 }
 
@@ -92,3 +124,11 @@
 //       left: -100%;
 //     }
 //   }
+
+
+.login-tab-rundown{
+    img {
+        width: 72%;
+        max-width: none;
+    }
+}

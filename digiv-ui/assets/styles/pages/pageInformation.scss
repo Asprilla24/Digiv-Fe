@@ -28,15 +28,16 @@
 
 }
 
-.pre-registration {
+.page-information{
     &-content {
-        background-image: url('../../images/background/bg-registration.png'); // background: linear-gradient(-25deg, #ff8a8a, #37e3ff);
+        background-image: url('../../images/background/bg-information.png'); // background: linear-gradient(-25deg, #ff8a8a, #37e3ff);
         display: flex;
         justify-content: center;
         align-items: center;
         background-size: cover;
         background-position-x: right;
         background-position-y: bottom;
+        margin-top: -8px;
 
         @media (min-width:1024px) and (max-width: 1280px) {
             background-size: cover;

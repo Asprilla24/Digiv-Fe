@@ -5,13 +5,14 @@ import ModalLoading from "@components/element/modalLoading";
 import logoAve from "@assets/images/logo/logo-ave.png";
 import { useRouter } from "next/router";
 import digivApiServices from "@utils/httpRequest";
+import VideoLift from "./view/videoLift";
 import { ModalAlert, ModalContext } from "@components/element/modal";
-import Cookies from 'js-cookie'
-
+import Cookies from "js-cookie";
 
 export default function login() {
 	const [showModalLoading, setShowModalLoading] = useState(true);
 	const [errorRegistration, setErrorRegistration] = useState({});
+	const [videoAnimation, setVideoAnimation] = useState(false);
 
 	const [errorLogin, setErrorLogin] = useState({});
 	const router = useRouter();
@@ -21,7 +22,7 @@ export default function login() {
 	const onLoginSubmit = async (values) => {
 		setShowModalLoading(true);
 		try {
-			const checkUser = await digivApi.post(`api/auth/login`, {			
+			const checkUser = await digivApi.post(`api/auth/login`, {
 				password: values.password,
 				email: values.email,
 			});
@@ -31,19 +32,18 @@ export default function login() {
 			setShowModalLoading(false);
 
 			if (status_code == 200) {
-				await openModalContext({
-					type: "success",
-					message:
-						"Sukses login",
-				});
-				Cookies.set('ATT',data.access_token)
-				Cookies.set('ART',data.refresh_token)
-				Cookies.set('AEU',data.email)
-				Cookies.set('AID',data.user_id)
-				router.push("/main-hall");
+				// await openModalContext({
+				// 	type: "success",
+				// 	message: "Sukses login",
+				// });
+				setVideoAnimation(true)
+				Cookies.set("ATT", data.access_token);
+				Cookies.set("ART", data.refresh_token);
+				Cookies.set("AEU", data.email);
+				Cookies.set("AID", data.user_id);
 			}
 		} catch (error) {
-			const data = error.response?.data;
+			const { data } = error.response;
 			let message = "error occured,pliss try again later";
 			setShowModalLoading(false);
 			if (data) {
@@ -90,7 +90,6 @@ export default function login() {
 					message:
 						"Sukses untuk reservarsi,silahkan chek email anda untuk konfirmasi",
 				});
-				router.push("/");
 			}
 		} catch (error) {
 			const data = error.response?.data;
@@ -120,18 +119,25 @@ export default function login() {
 		}
 	};
 
-
 	useEffect(() => {
 		setTimeout(function () {
 			setShowModalLoading(false);
 		}, 1500);
 	}, []);
 
+	const onEndedVideo = () => {
+		setShowModalLoading(true)
+		router.push("/main-hall");
+	}
+
 	return (
 		<>
 			<div className='fullscreen-bg'>
 				<video loop muted autoPlay className='fullscreen-bg__video'>
-					<source src='http://34.107.209.44/video/bg-registration.mp4' type='video/mp4' />
+					<source
+						src={`${ENV.ASSETS_URL}video/bg-registration.mp4`}
+						type='video/mp4'
+					/>
 				</video>
 			</div>
 			<div className='relative font-sans antialiased bg-grey-lightest w-full h-full'>
@@ -152,6 +158,7 @@ export default function login() {
 						/>
 					</div>
 				</div>
+				<VideoLift onEndedVideo={onEndedVideo} showVideo={videoAnimation} />
 				<ModalLoading isShowLoading={showModalLoading} />
 			</div>
 		</>

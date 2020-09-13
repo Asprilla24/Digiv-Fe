@@ -11,7 +11,7 @@ export default function footer() {
 				rel='noopener noreferrer'>
 				Digital Innovation
 				<img
-					src='logo/digital-innovation.png'
+					src='/logo/digital-innovation.png'
 					alt='Vercel Logo'
 					className="footer_logo"
 				/>

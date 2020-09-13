@@ -54,7 +54,7 @@ const FormField = (props) => {
 							{...attr}
 						/>
 						{form.errors[field.name] && form.touched[field.name] ? (
-							<p className='text-xs mt-1 text-red-600'>{form.errors[field.name]}</p>
+							<p className='text-xl mt-1 text-red-600 text-base'>{form.errors[field.name]}</p>
 						) : null}
 					</div>
 				);

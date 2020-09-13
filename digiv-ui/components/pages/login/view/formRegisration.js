@@ -34,7 +34,7 @@ export default function formRegisration(props) {
 		} catch (err) {
 			throw err;
 		}
-	}, 1500);
+	}, 500);
 
 	const handelChangeCity = debounce(async (provinceId, keyword) => {
 		const searchKeyword = keyword;
@@ -49,20 +49,20 @@ export default function formRegisration(props) {
 		} catch (err) {
 			throw err;
 		}
-	}, 1500);
+	}, 500);
 
 	return (
 		<>
 			<div className=' mx-auto rounded  w-full'>
-				<div className='py-4 px-8 text-black text-4xl font-bold text-white'>
+				<div className='py-4 px-4 text-black text-4xl font-bold text-white'>
 					<h1>Daftar</h1>
 				</div>
-				<div className='px-8 text-black'>
+				<div className='px-4 px-4 text-black'>
 					{errorRegistration?.status && (
 						<Alert message={errorRegistration?.message} />
 					)}
 				</div>
-				<div className='py-4 px-8'>
+				<div className='py-4 px-4 '>
 					<Formik
 						initialValues={userDataReservation}
 						validationSchema={validationReservationSchema}
@@ -78,18 +78,12 @@ export default function formRegisration(props) {
 									withLabel={false}
 								/>
 
-								<FormField
-									name='email'
-									label='Email Address'
-									placeholder='input Email'
-									className='mb-4'
-									withLabel={false}
-								/>
+						
 								<FormField
 									name='nomer_telp'
 									label='Nomer Telepon'
 									type='numberphone'
-									placeholder='Nomer Telepon'
+									placeholder='Nomer Telepon contoh : 0817627362'
 									className='mb-4'
 									withLabel={false}
 								/>
@@ -122,6 +116,13 @@ export default function formRegisration(props) {
 									onChange={(e) => {
 										handelChangeCity(values.province, e);
 									}}
+								/>
+								<FormField
+									name='email'
+									label='Email Address'
+									placeholder='Email contoh : nama.kamu@email.co.id'
+									className='mb-4'
+									withLabel={false}
 								/>
 
 								<FormField

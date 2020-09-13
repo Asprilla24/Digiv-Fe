@@ -42,6 +42,9 @@ module.exports = (config, options) => {
 
 	return {
 		...config,
+		node :{
+			fs: 'empty'
+		},
 		plugins: [
 			...config.plugins,
 			new webpack.DefinePlugin(envObject),

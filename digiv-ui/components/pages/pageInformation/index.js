@@ -30,13 +30,6 @@ export default function PreRegistration() {
 	return (
 		<>
 			<div className='font-sans antialiased bg-grey-lightest w-full h-full'>
-				<ModalAlert
-					type='error'
-					message='wah anda sukses'
-					onClickAlert={() => {
-						console.log("dfsdfsfs");
-					}}
-				/>
 				<div>
 					<img
 						className='logo-30 hidden xl:block lg:block absolute '
@@ -44,7 +37,7 @@ export default function PreRegistration() {
 				</div>
 				<div>
 					<img
-						className='absolute top-0 right-0 w-6/12 xl:w-4/12 lg:w-4/12'
+						className='absolute top-0 right-0 w-6/12 xl:w-2/12 lg:w-2/12 md:w-2/12 sm:w-4/12 '
 						src={logoAdira}></img>
 				</div>
 				<div className='w-full  grid grid-cols-1  sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2'>
@@ -61,10 +54,10 @@ export default function PreRegistration() {
 
 				<ModalLoading isShowLoading={showModalLoading}  />
 			</div>
-			<div className='logo-sponsor hidden lg:block xl:block md:hidden sm:hidden absolute bottom-0 left-0'>
+			{/* <div className='logo-sponsor hidden lg:block xl:block md:hidden sm:hidden absolute bottom-0 left-0'>
 				<p className='text-xl text-white my-2'> di sponsori oleh : </p>
-				<img className='w-12/12' src={logoDanamon}></img>
-			</div>
+				<img className='w-6/12' src={logoDanamon}></img>
+			</div> */}
 		</>
 	);
 }

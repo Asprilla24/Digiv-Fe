@@ -8,6 +8,8 @@ export default function preRegistration() {
 		<div className='min-w-full min-h-full  pre-registration-content'>
 			<Head>
 				<title>Adira VirtualTour</title>
+				<script src='https://www.gstatic.com/firebasejs/7.20.0/firebase-app.js'></script>
+				<script src='https://www.gstatic.com/firebasejs/7.20.0/firebase-firestore.js'></script>
 			</Head>
 			<ModalProvider>
 				<PreRegistration />

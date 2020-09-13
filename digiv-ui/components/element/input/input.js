@@ -19,7 +19,7 @@ export default function Input (props){
 	const validateInput = (event) => {
 		//when user unput enter
 		if (event.keyCode == 13) return event.preventDefault();
-
+		console.log(type)
 		if (type === "number") {
 			//not allowed when user input `e` and type number
 			return event.keyCode == 69 ? event.preventDefault() : true;
@@ -47,6 +47,7 @@ export default function Input (props){
 					type={type === 'numberphone' ? 'number' :  type }
 					value={value}
 					placeholder={placeholder}
+					onKeyDown ={validateInput}
 					disabled={disabled}
 					{...attr}
 					{...field}

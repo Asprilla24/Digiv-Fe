@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import FormRegister from "./formRegisration";
 import FormLogin from "./formLogin";
-
+import ListRudown from "@assets/images/list-rundown.png";
+import className from "classnames"
 export default function Tabs(props) {
 	const {
 		onLoginSubmit,
@@ -22,7 +23,7 @@ export default function Tabs(props) {
 								<ul
 									className='flex mb-0 list-none flex-wrap pt-3 pb-4 flex-row'
 									role='tablist'>
-									<li className='-mb-px mr-2 last:mr-0 flex-auto text-center'>
+									<li className='-mb-px mr-2  my-2  last:mr-0 flex-auto text-center'>
 										<a
 											className={
 												"text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal " +
@@ -40,7 +41,7 @@ export default function Tabs(props) {
 											Login
 										</a>
 									</li>
-									<li className='-mb-px mr-2 last:mr-0 flex-auto text-center'>
+									<li className='-mb-px  my-2 mr-2 last:mr-0 flex-auto text-center'>
 										<a
 											className={
 												"text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal " +
@@ -58,7 +59,7 @@ export default function Tabs(props) {
 											Register
 										</a>
 									</li>
-									<li className='-mb-px mr-2 last:mr-0 flex-auto text-center'>
+									<li className='-mb-px my-2 mr-2 last:mr-0 flex-auto text-center'>
 										<a
 											className={
 												"text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal " +
@@ -73,12 +74,12 @@ export default function Tabs(props) {
 											data-toggle='tab'
 											href='#link3'
 											role='tablist'>
-											Rowndown
+											Program 
 										</a>
 									</li>
 								</ul>
 								<div className='relative flex flex-col min-w-0 break-words  w-full mb-6 shadow-lg rounded'>
-									<div className='px-4 py-5 flex-auto'>
+									<div className='px-2 py-5 flex-auto'>
 										<div className='tab-content tab-space'>
 											<div
 												className={openTab === 1 ? "block" : "hidden"}
@@ -91,16 +92,9 @@ export default function Tabs(props) {
 												<FormRegister onSubmitRegistration={onSubmitRegistration} errorRegistration={errorRegistration} />
 											</div>
 											<div
-												className={openTab === 3 ? "block" : "hidden"}
+												className={className("login-tab-rundown flex justify-center",openTab === 3 ? "block" : "hidden")}
 												id='link3'>
-												<p>
-													Efficiently unleash cross-media information without
-													cross-media value. Quickly maximize timely
-													deliverables for real-time schemas.
-													<br />
-													<br /> Dramatically maintain clicks-and-mortar
-													solutions without functional solutions.
-												</p>
+												<img src={ListRudown}></img>
 											</div>
 										</div>
 									</div>

@@ -17,7 +17,7 @@ export default function FormRegistration(props) {
 
 	return (
 		<>
-			<div className=' w-10/12 md:w-8/12 lg:w-8/12 xl:w-6/2 content-reservation'>
+			<div className=' w-10/12 md:w-8/12 lg:w-8/12 xl:w-8/2 content-reservation'>
 				<div className='mx-auto w-full '>
 					<div className=' mx-auto w-full'>
 						<div className='py-4 px-8 text-black text-4xl font-bold text-white'>

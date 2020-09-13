@@ -32,7 +32,7 @@ export default function formReservation(props) {
 							autoPlay
 							className='fullscreen-bg-information__video'
 							onEnded={onEndedVideo}>
-							<source src='http://34.107.209.44/video/camp-dome.mp4' type='video/mp4' />
+							<source src={`${ENV.ASSETS_URL}video/camp-dome.mp4`} type='video/mp4' />
 						</video>
 					</div>
 				</motion.div>
