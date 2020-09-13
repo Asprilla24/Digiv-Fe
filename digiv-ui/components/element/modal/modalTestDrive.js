@@ -1,17 +1,77 @@
-import React, { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
+import React, { useState, useEffect } from "react";
+import { FormField } from "@components/element/form";
+import Alert from "@components/element/alert";
+import SelectAutoComplete from "@components/element/selectAutoComplete";
+import digivApiServices from "@utils/httpRequest";
+import { Formik } from "formik";
+//import { validationReservationSchema } from "../scheme/validation";
+import debounce from "@utils/debounce";
 
 export default function modalTestDrive(props) {
-	const { message, isShow, onClose } = props;
+    const { dataUser, isShow, onClose, onSubmitTestDrive, errorTestDrive } = props;
+    const [userDataTestDrive, setUserDataTestDrive] = useState({
+		email: "",
+		password: "",
+		province: "",
+		city: "",
+		nomer_telp: "",
+		name: "",
+    });
+    
+	const { digivApi } = digivApiServices();
+	const [provinceList, setProvinceList] = useState([]);
+    const [cityList, setCityList] = useState([]);
+    const [modelList, setModelList] = useState([]);
+    const [typeList, setTypeList] = useState([]);
+
+    useEffect(() => {
+		if (dataUser) {
+			setUserDataTestDrive({
+				...userDataTestDrive,
+				...dataUser,
+			});
+		}
+	}, [dataUser]);
+
+	const handleChangeProvince = debounce(async (keyword) => {
+		const searchKeyword = keyword;
+		try {
+			const getProvinceData = await digivApi.get(
+				`api/province?keyword=${searchKeyword}`,
+			);
+			const provinceData = getProvinceData.data.data;
+			if (provinceData) {
+				setProvinceList(provinceData);
+			}
+		} catch (err) {
+			throw err;
+		}
+	}, 1500);
+
+	const handelChangeCity = debounce(async (provinceId, keyword) => {
+		const searchKeyword = keyword;
+		try {
+			const getCityByProvince = await digivApi.get(
+				`api/city?province_id=${provinceId}&keyword=${searchKeyword}`,
+			);
+			const cityData = getCityByProvince.data.data;
+			if (cityData) {
+				setCityList(cityData);
+			}
+		} catch (err) {
+			throw err;
+		}
+	}, 1500);
+
 	return (
 		<>
 			{isShow ? (
 				<>
 					<div
+                        id="outer-div"
 						className='justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none'
-						onClick={onClose}>
-						<div className='  relative max-h-screen w-auto my-6 max-w-sm md:mx-auto lg:max-w-3xl xl:max-w-3xl'>
+						onClick={e => onClose(e)}>
+						<div className='  relative max-h-screen w-auto my-6 max-w-sm md:mx-auto lg:max-w-3xl xl:max-w-3xl' onClick="">
 							{/*content*/}
 							<div className='modal-car-container border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none'>
 								{/*header*/}
@@ -19,8 +79,8 @@ export default function modalTestDrive(props) {
 									<h3 className='text-3xl font-semibold'>Test Drive</h3>
 									<button
 										className='p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none'
-										onClick={onClose}>
-										<span className='bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none'>
+										>
+										<span id="btn-close" onClick={e => onClose(e)} className='bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none'>
 											×
 										</span>
 									</button>

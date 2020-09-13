@@ -41,13 +41,13 @@
 }
 
 .videoplayer{
-    z-index: 2;
+    z-index: 10;
     position:relative;
-    margin-top: 23vh;
-    margin-left: 25vw;
+    margin-top: 24.5vh;
+    margin-left: 28.75vw;
 }
 
 .bg-image{
-    z-index: -1;
-    position:absolute;
+    //z-index: -1;
+    //position:absolute;
 }

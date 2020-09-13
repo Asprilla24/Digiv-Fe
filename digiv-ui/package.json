@@ -44,6 +44,7 @@
     "next-with-workbox": "^1.2.4",
     "node-sass": "^4.14.1",
     "react": "16.13.1",
+    "react-chatbox-component": "^0.0.5",
     "react-dom": "16.13.1",
     "react-player": "^2.6.1",
     "responsive-loader": "^2.1.1",

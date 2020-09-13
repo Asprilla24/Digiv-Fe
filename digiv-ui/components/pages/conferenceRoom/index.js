@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import DefaultLayout from "@components/layout/defaultLayout";
 import "@styles/pages/conference.scss";
+import "@styles/pages/boothVideo.scss";
 import imageBooth from "@assets/images/background/bg-conf-room.jpeg";
-import carAvanxa from "@assets/images/car/car-avanza.png";
 import {ModalDetailCar} from "@components/element/modal";
 import {ModalTestDrive} from "@components/element/modal";
 import {ModalBooking} from "@components/element/modal";
@@ -40,6 +40,19 @@ export default function ConferenceRoom() {
 			setStyleVideo({ ...styleVideo, width: `100%`, height: `${eh}"px"` });
 		}
 	};
+
+	const prosesModal = (e, from) => {
+		console.log(e.target.id);
+		if(e.target.id == "outer-div" || e.target.id == "btn-close"){
+			if(from == "test-drive"){
+				setShowModalTestDrive(false);
+			}else if(from == "booking"){
+				setShowModalBooking(false);
+			}
+			// else(from == "live-chat"){
+			// }
+		}
+	}
     
     useEffect(() => {
 		window.addEventListener("resize", resizeVideo);
@@ -52,7 +65,7 @@ export default function ConferenceRoom() {
 
 	return (
 		<DefaultLayout>
-			<main>
+			{/* <main>
                 <div className='main-booth' style={{flex: 1,
                     width: '100%',
                     height: '100vh',
@@ -61,16 +74,17 @@ export default function ConferenceRoom() {
 					<img class="bg-image" src={imageBooth} />
 					<div onClick={()=>onClickBoot('zoom')} class="click-zoom" />
 					<div onClick={()=>onClickBoot('rundown')} class="click-rundown" />
-                    <div id='video-booth' className='' style={styleVideo}>
-                    <div class="videoplayer">
+                    <div id='video-booth' className='' style={styleVideo}> */}
+                    {/* <div class="videoplayer">
                         <ReactPlayer
                             playing={true}
-                            width={'50vw'}
-                            height={'60vh'}
-                            url="https://www.youtube.com/watch?v=CmS5rlX9cDA"
+                            width="100%"
+                            height="100%"
+                            url="https://youtu.be/F3fkV8o6mjw"
                         />
-                    </div>
-                    {/* <video
+                    </div> */}
+					{/* width={'41.5vw'} {'56vh'}
+					<video
 							playsInline='playsInline'
 							autoPlay='autoplay'
 							muted='muted'
@@ -80,14 +94,43 @@ export default function ConferenceRoom() {
 								type='video/mp4'
 							/>
 					</video> */}
+                    {/* </div>
+				</div> */}
+				{/* <ModalDetailCar isShow={shoModalCar} onClose={()=>setShowModalCar(false)} />
+				<ModalBooking isShow={showModalBooking} onClose={(e)=>prosesModal(e, "booking")} />
+				<ModalTestDrive isShow={showModalTestDrive} onClose={(e)=>prosesModal(e, "test-drive")} /> */}
+			{/* </main> */}
+
+			<main id='virutal-main' className='booth-video-main'>
+					<div id='video-booth' className='' style={styleVideo}>
+					<img class="bg-image" src={imageBooth} />
+					<div class="videoplayer">
+                        <ReactPlayer
+                            playing={true}
+                            width="100%"
+                            height="100%"
+                            url="https://youtu.be/F3fkV8o6mjw"
+                        />
                     </div>
-					<div onClick={()=>onClickBoot('avanza')} className='item-layer item-layer__1'>
-						<img src={carAvanxa}></img>
+						{/* <video
+							playsInline='playsInline'
+							autoPlay='autoplay'
+							muted='muted'
+							loop='loop'>
+							<source
+								src='http://34.107.209.44/booth/video/MAZDA_booth.mp4'
+								type='video/mp4'
+							/>
+						</video>
+						<div
+							className='car-link mazda2-link'
+							onClick={onClickBoot}
+							data-target='#mazdaCarModel'></div> */}
 					</div>
-				</div>
-				<ModalDetailCar isShow={shoModalCar} onClose={()=>setShowModalCar(false)} />
-				<ModalBooking isShow={showModalBooking} onClose={()=>setShowModalBooking(false)} />
-				<ModalTestDrive isShow={showModalTestDrive} onClose={()=>setShowModalTestDrive(false)} />
+					<ModalDetailCar
+						isShow={shoModalCar}
+						onClose={() => setShowModalCar(false)}
+					/>
 			</main>
 		</DefaultLayout>
 	);
