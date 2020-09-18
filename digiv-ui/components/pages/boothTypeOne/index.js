@@ -6,12 +6,15 @@ import { useVideoStyle } from "@helper/hooks";
 import { useRouter } from "next/router";
 import  CarView from './view/carView'
 import  TvcView from './view/tvcView'
+import {ModalLiveChat} from "@components/element/modal";
 
 export default function MainHall() {
 	const router = useRouter();
 	const styleVideo = useVideoStyle();
 	const [shoModalCar, setShowModalCar] = useState(false);
 	const [showModalProgram, setShowModalProgram] = useState(false);
+	const [shoModalLiveChat,setShowModalChat] = useState(false)
+	const userInfo = { fullname:"Doni Wijaya", phone:"0822121112", email:"doni.wijaya@gmail.com", booth:"Honda", domainId:"1" }
 
 	const onClickBoot = (value) => {
 		setShowModalCar(true);
@@ -44,6 +47,7 @@ export default function MainHall() {
 						onClose={() => setShowModalCar(false)}
 					/>
 					<ModalDetailProgram isShow={showModalProgram} onClose={() => setShowModalProgram(false)} />
+					<ModalLiveChat userInfo={userInfo} isShow={shoModalLiveChat} />
 				</main>
 			</>
 		</DefaultLayout>

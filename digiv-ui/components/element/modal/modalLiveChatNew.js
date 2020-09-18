@@ -18,24 +18,36 @@ class NewChat extends React.Component {
         userList:"",
         yourName : "",
         message: "",
-        isShow:false
+        isShow:false,
+        propUserInfo:null
       };
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setState({ isShow:nextProps.isShow });
+        this.setState({ 
+            isShow:nextProps.isShow,
+            propUserInfo:nextProps.userInfo
+        }, function(){
+            if(this.state.propUserInfo != null){
+                loadFireBase();
+                this.getUserData();
+            }
+        });
     }
 
     componentDidMount(){
-        loadFireBase();
-        this.getUserData();
+        //console.log(this.state.propUserInfo);
+        // if(this.state.propUserInfo != null){
+        //     loadFireBase();
+        //     this.getUserData();
+        // }
     }
 
     getUserData(){
         console.log("get user data");
         //emulasi ambil data dari local db
-        let email = "sandy@gmail.com";
-        let phone = "082234033693";
+        let email = this.state.propUserInfo.email;
+        let phone = this.state.propUserInfo.phone;
 
         //find to user data
         this.state.db.collection("users").where("email", "==", email).where("phone", "==", phone).onSnapshot(querySnapshot => {
@@ -80,7 +92,7 @@ class NewChat extends React.Component {
         console.log("add user");
         this.state.db.collection('users').add({
             email: email,
-            name: "Fullname",
+            name: this.state.propUserInfo.fullname,
             phone: phone,
             profile_pict:"-"
         }).then(docRef => {
@@ -128,7 +140,8 @@ class NewChat extends React.Component {
             Visitor:"users/"+this.state.visitorId,
             VisitorName:this.state.yourName,
             roomStatus: "created",
-            domainId:"1", //PERLU DISETTING SESUAI YG DIKLIK NANTINYA
+            domainId:this.state.propUserInfo.domainId, //PERLU DISETTING SESUAI YG DIKLIK NANTINYA
+            booth:this.state.propUserInfo.booth,
             lastMsgSender:"",
             lastMsg:"",
             lastMsgTime:"",
@@ -231,9 +244,27 @@ class NewChat extends React.Component {
 
     onClose = e => {
         if(e.target.id == "outer-div" || e.target.id == "btn-close"){
-        this.setState({
-          isShow: false
-        });
+            let resp = window.confirm('Are you sure to close this chat?');
+            if(resp){
+                if(this.state.chatroom_id != ''){
+                    this.state.db.collection("chat").doc(this.state.chatroom_id).set({
+                        roomStatus:"close"
+                    }, { merge: true })
+                    .then(function() {
+                        console.error("Success writing document: ");
+                        this.setState({
+                            isShow: false,
+                            chatroom_id:''
+                        });
+                    })
+                    .catch(function(error) {
+                        console.error("Error writing document: ", error);
+                    });   
+                }
+                this.setState({
+                    isShow: false
+                });
+            }
         }
         //console.log("chat val "+this.state.message);
     }
@@ -244,8 +275,9 @@ class NewChat extends React.Component {
             {this.state.isShow ? (
 				<>
                 <div
+                        id="outer-div"
 						className='justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none'
-						>
+						onClick={e => this.onClose(e)}>
 						<div className='  relative max-h-screen w-100 my-6 max-w-sm md:mx-auto lg:max-w-3xl xl:max-w-3xl'>
 							{/*content*/}
 							<div className='modal-car-container border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none'>
@@ -255,7 +287,7 @@ class NewChat extends React.Component {
 									<button
 										className='p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none'
 										>
-										<span className='bg-transparent text-white opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none'>
+										<span id="btn-close" onClick={e => this.onClose(e)} className='bg-transparent text-white opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none'>
 											x
 										</span>
 									</button>

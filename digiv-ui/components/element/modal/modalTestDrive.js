@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { FormField, Select } from "@components/element/form";
-import Alert from "@components/element/alert";
-import SelectAutoComplete from "@components/element/selectAutoComplete";
 import digivApiServices from "@utils/httpRequest";
 import { Formik } from "formik";
-//import { validationReservationSchema } from "../scheme/validation";
+import { validationBookingandTDSchema } from "./schema/validation";
 import debounce from "@utils/debounce";
+import ModalLoading from "@components/element/modalLoading";
+import { ModalAlert, ModalContext } from "@components/element/modal";
 
 export default function modalTestDrive(props) {
-	const { dataUser, isShow, onClose, onSubmitTestDrive, errorTestDrive } = props;
+	const { userInfo, isShow, onClose, errorTestDrive } = props;
 	const models = [
 		{ value: "pilihmodel", label: "--Pilih Model--" }
 	  ];
@@ -17,57 +17,92 @@ export default function modalTestDrive(props) {
 	  ];
     const [userDataTestDrive, setUserDataTestDrive] = useState({
 		email: "",
-		password: "",
-		province: "",
-		city: "",
-		nomer_telp: "",
-		name: "",
-    });
+		phone: "",
+		fullname: "",
+	});
+	
+	const [showModalLoading, setShowModalLoading] = useState(false);
+    const openModalContext = useContext(ModalContext);
     
 	const { digivApi } = digivApiServices();
-	const [provinceList, setProvinceList] = useState([]);
-    const [cityList, setCityList] = useState([]);
     const [modelList, setModelList] = useState([]);
     const [typeList, setTypeList] = useState([]);
 
     useEffect(() => {
-		if (dataUser) {
+		if (userInfo) {
 			setUserDataTestDrive({
 				...userDataTestDrive,
-				...dataUser,
+				...userInfo,
 			});
 		}
-	}, [dataUser]);
+	}, [userInfo]);
 
-	const handleChangeProvince = debounce(async (keyword) => {
+	const handleChangeCarModel = debounce(async (keyword) => {
 		const searchKeyword = keyword;
 		try {
-			const getProvinceData = await digivApi.get(
+			const getCarModelData = await digivApi.get(  //GET TIPE MODEL NIH HARUSNYAA
 				`api/province?keyword=${searchKeyword}`,
 			);
-			const provinceData = getProvinceData.data.data;
-			if (provinceData) {
-				setProvinceList(provinceData);
+			const carModelData = getCarModelData.data.data;
+			if (carModelData) {
+				setModelList(carModelData);
 			}
 		} catch (err) {
 			throw err;
 		}
-	}, 1500);
-
-	const handelChangeCity = debounce(async (provinceId, keyword) => {
-		const searchKeyword = keyword;
+    }, 1500);
+    
+    const onSubmitTestDrive = async (values) => {
+		setShowModalLoading(true);
 		try {
-			const getCityByProvince = await digivApi.get(
-				`api/city?province_id=${provinceId}&keyword=${searchKeyword}`,
-			);
-			const cityData = getCityByProvince.data.data;
-			if (cityData) {
-				setCityList(cityData);
+			const insertBooking = await digivApi.post(`api/form/test-drive`, {
+				email: values.email,
+				full_name: values.fullname,
+                phone_no: values.phone,
+                brand: userDataTestDrive.booth,
+                model: values.model,
+                type: values.type
+			});
+			const {
+				data: { data, status_code },
+			} = insertBooking;
+			setShowModalLoading(false);
+
+			if (status_code == 201) {
+				await openModalContext({
+					type: "success",
+					message:
+						"Sukses untuk reservarsi,silahkan chek email anda untuk konfirmasi",
+				});
+				router.push("/");
 			}
-		} catch (err) {
-			throw err;
+		} catch (error) {
+			const data = error.response?.data;
+			let message = "error occured,please try again later";
+
+			if (data) {
+				const { status_code } = data;
+				switch (status_code) {
+					case 400:
+						message = "Data Tidak Valid,check data anda";
+						break;
+					case 500:
+						message = "Email anda sudah pernah terdaftar";
+						break;
+				}
+			}
+			// setErrorReservation({
+			// 	status: true,
+			// 	message,
+			// });
+		} finally {
+			// setErrorRegistration({
+			// 	status: true,
+			// 	message: "Error Occured please try again later",
+			// });
+			setShowModalLoading(false);
 		}
-	}, 1500);
+	};
 
 	return (
 		<>
@@ -94,6 +129,9 @@ export default function modalTestDrive(props) {
 								{/*body*/}
 								<div className='  modal-car-content overflow-x-hidden overflow-y-auto p-6 flex-auto grid gap-4 grid-cols-1'>
 								<Formik
+								initialValues={userDataTestDrive}
+								validationSchema={validationBookingandTDSchema}
+								onSubmit={onSubmitTestDrive}
 								>
 								{({ values, resetForm, handleSubmit }) => (
 									<form onSubmit={handleSubmit}>

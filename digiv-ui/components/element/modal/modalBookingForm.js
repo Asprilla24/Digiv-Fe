@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { FormField, Select } from "@components/element/form";
 import digivApiServices from "@utils/httpRequest";
 import { Formik } from "formik";
-//import { validationReservationSchema } from "../scheme/validation";
+import { validationBookingandTDSchema } from "./schema/validation";
 import debounce from "@utils/debounce";
+import ModalLoading from "@components/element/modalLoading";
+import { ModalAlert, ModalContext } from "@components/element/modal";
 
 export default function modalBookingForm(props) {
-    const { dataUser, isShow, onClose, onSubmitTestDrive, errorTestDrive } = props;
+    const { userInfo, isShow, onClose, errorTestDrive } = props;
     const models = [
 		{ value: "pilihmodel", label: "--Pilih Model--" }
 	  ];
@@ -15,57 +17,96 @@ export default function modalBookingForm(props) {
 	  ];
     const [userDataTestDrive, setUserDataTestDrive] = useState({
 		email: "",
-		password: "",
-		province: "",
-		city: "",
-		nomer_telp: "",
-		name: "",
+		phone: "",
+        fullname: "",
+        booth:"", 
+        domainId:""
     });
+    const [showModalLoading, setShowModalLoading] = useState(false);
+    const openModalContext = useContext(ModalContext);
     
 	const { digivApi } = digivApiServices();
-	const [provinceList, setProvinceList] = useState([]);
-    const [cityList, setCityList] = useState([]);
     const [modelList, setModelList] = useState([]);
     const [typeList, setTypeList] = useState([]);
 
     useEffect(() => {
-		if (dataUser) {
+        console.log(userInfo);
+		if (userInfo) {
 			setUserDataTestDrive({
 				...userDataTestDrive,
-				...dataUser,
+				...userInfo,
 			});
 		}
-	}, [dataUser]);
+	}, [userInfo]);
 
-	const handleChangeProvince = debounce(async (keyword) => {
+	const handleChangeCarModel = debounce(async (keyword) => {
 		const searchKeyword = keyword;
 		try {
-			const getProvinceData = await digivApi.get(
+			const getCarModelData = await digivApi.get(
 				`api/province?keyword=${searchKeyword}`,
 			);
-			const provinceData = getProvinceData.data.data;
-			if (provinceData) {
-				setProvinceList(provinceData);
-			}
-		} catch (err) {
-			throw err;
-		}
-	}, 1500);
-
-	const handelChangeCity = debounce(async (provinceId, keyword) => {
-		const searchKeyword = keyword;
-		try {
-			const getCityByProvince = await digivApi.get(
-				`api/city?province_id=${provinceId}&keyword=${searchKeyword}`,
-			);
-			const cityData = getCityByProvince.data.data;
-			if (cityData) {
-				setCityList(cityData);
+			const carModelData = getCarModelData.data.data;
+			if (carModelData) {
+				setModelList(carModelData);
 			}
 		} catch (err) {
 			throw err;
 		}
     }, 1500);
+    
+    const onSubmitBooking = async (values) => {
+        console.log("kepanggil");
+		setShowModalLoading(true);
+		try {
+			const insertBooking = await digivApi.post(`api/form/booking`, {
+				email: values.email,
+				full_name: values.fullname,
+                phone_no: values.phone,
+                brand: userDataTestDrive.booth,
+                model: values.model,
+                type: values.type
+			});
+			const {
+				data: { data, status_code },
+			} = insertBooking;
+			setShowModalLoading(false);
+
+			if (status_code == 201) {
+				await openModalContext({
+					type: "success",
+					message:
+						"Sukses untuk reservarsi,silahkan chek email anda untuk konfirmasi",
+				});
+				router.push("/");
+			}
+		} catch (error) {
+			const data = error.response?.data;
+			let message = "error occured,please try again later";
+
+			if (data) {
+				const { status_code } = data;
+				switch (status_code) {
+					case 400:
+						message = "Data Tidak Valid,check data anda";
+						break;
+					case 500:
+						message = "Email anda sudah pernah terdaftar";
+						break;
+				}
+			}
+			// setErrorReservation({
+			// 	status: true,
+			// 	message,
+			// });
+		} finally {
+			// setErrorRegistration({
+			// 	status: true,
+			// 	message: "Error Occured please try again later",
+			// });
+			setShowModalLoading(false);
+		}
+	};
+
     
 	return (
 		<>
@@ -73,7 +114,7 @@ export default function modalBookingForm(props) {
 				<>
 					<div
                         id="outer-div"
-						className='justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-100 outline-none focus:outline-none'
+						className='justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none'
 						onClick={e => onClose(e)}>
 						<div className='  relative max-h-screen w-auto my-6 max-w-sm md:mx-auto lg:max-w-3xl xl:max-w-3xl'>
 							{/*content*/}
@@ -92,6 +133,9 @@ export default function modalBookingForm(props) {
 								{/*body*/}
 								<div className='  modal-car-content overflow-x-hidden overflow-y-auto p-6 flex-auto grid gap-4 grid-cols-1'>
                                 <Formik
+                                    initialValues={userDataTestDrive}
+                                    validationSchema={validationBookingandTDSchema}
+                                    onSubmit={onSubmitBooking}
 								>
 								{({ values, resetForm, handleSubmit }) => (
                                 <form onSubmit={handleSubmit}>
@@ -100,7 +144,7 @@ export default function modalBookingForm(props) {
 											<FormField
 												name='fullname'
 												label='Fullname'
-												placeholder='Fullname'
+                                                placeholder='Fullname'
 												class="appearance-none block w-full text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
 												withLabel={false}
 											/> 
@@ -111,7 +155,7 @@ export default function modalBookingForm(props) {
 											<FormField
 												name='email'
 												label='Email Address'
-												placeholder='your@email.com'
+                                                placeholder='your@email.com'
 												class="appearance-none block w-full text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
 												withLabel={false}
 											/>
@@ -120,7 +164,7 @@ export default function modalBookingForm(props) {
 											<FormField
 												name='phone'
 												label='Phone'
-												placeholder='08123456789'
+                                                placeholder='08123456789'
 												class="appearance-none block w-full text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
 												withLabel={false}
 											/> 
@@ -152,27 +196,18 @@ export default function modalBookingForm(props) {
 										</div>
 										
 
-										<div className='w-full mt-8'>
-											<button
-												className=' w-full bg-yellow-500 text-white font-bold py-2 px-4 rounded'
+										<div className='grid grid-flow-col grid-cols-1 grid-rows-1 gap-1 modal-car-footer p-6 border-t border-solid border-gray-300 rounded-b'>
+                                            <button
+										        className='bg-green-500 text-white active:bg-green-600 uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1'
 												type='submit'>
-												Request Test Drive
+												Submit Booking
 											</button>
 										</div>
 									</form>
                                     )}
                                     </Formik>
+                                    <ModalLoading isShowLoading={showModalLoading} />
                                 </div>
-								{/*footer*/}
-								<div className='grid grid-flow-col grid-cols-1 grid-rows-1 gap-1 modal-car-footer p-6 border-t border-solid border-gray-300 rounded-b'>
-									<button
-										className='bg-green-500 text-white active:bg-green-600 uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1'
-										type='button'
-										style={{ transition: "all .15s ease" }}
-										onClick={onClose}>
-										Submit Booking
-									</button>
-								</div>
 							</div>
 						</div>
 					</div>

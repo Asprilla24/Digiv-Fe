@@ -5,6 +5,7 @@ import imageBooth from "@assets/images/background/bg-booth-toyota.png";
 import carAvanxa from "@assets/images/car/car-avanza.png";
 import {ModalDetailCar} from "@components/element/modal";
 import { useRouter } from "next/router";
+import {ModalLiveChat} from "@components/element/modal";
 
 export default function MainHall() {
 	const router = useRouter();
@@ -12,6 +13,8 @@ export default function MainHall() {
 	const [styleVideo, setStyleVideo] = useState({
 		display: "block",
 	});
+	const [shoModalLiveChat,setShowModalChat] = useState(false)
+	const userInfo = { fullname:"Doni Wijaya", phone:"0822121112", email:"doni.wijaya@gmail.com", booth:"Honda", domainId:"1" }
 
 	const onClickBoot = (value) => {
 		setShowModalCar(true);
@@ -60,6 +63,7 @@ export default function MainHall() {
 						isShow={shoModalCar}
 						onClose={() => setShowModalCar(false)}
 					/>
+					<ModalLiveChat userInfo={userInfo} isShow={shoModalLiveChat} />
 				</main>
 			</>
 		</DefaultLayout>

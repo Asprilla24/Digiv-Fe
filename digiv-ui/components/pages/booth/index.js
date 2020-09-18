@@ -5,12 +5,16 @@ import imageBooth from "@assets/images/background/bg-booth-toyota.png";
 import carAvanxa from "@assets/images/car/car-avanza.png";
 import {ModalDetailCar} from "@components/element/modal";
 import {ModalLiveChat} from "@components/element/modal";
+import {ModalTestDrive} from "@components/element/modal";
+import {ModalBooking} from "@components/element/modal";
 import { useRouter } from "next/router";
 
 export default function MainHall() {
     const router = useRouter();
 	const [shoModalCar,setShowModalCar] = useState(false)
 	const [shoModalLiveChat,setShowModalChat] = useState(false)
+	const [showModalBooking,setShowModalBooking] = useState(false);
+	const [showModalTestDrive,setShowModalTestDrive] = useState(false);
 
 	const onClickBoot = (value) => {
         setShowModalCar(true)
@@ -18,7 +22,8 @@ export default function MainHall() {
 	};
 
 	const onClickChat = (value) => {
-        setShowModalChat(true)
+		//setShowModalChat(true)
+		setShowModalBooking(true);
 		router.push("/booth");
 	};
 
@@ -36,6 +41,8 @@ export default function MainHall() {
 		}
 	}
 
+	const userInfo = { fullname:"Doni Wijaya", phone:"0822121112", email:"doni.wijaya@gmail.com", booth:"Honda", domainId:"1" }
+
 	return (
 		<DefaultLayout>
 			<main>
@@ -47,7 +54,9 @@ export default function MainHall() {
 					</div>
 				</div>
 				<ModalDetailCar isShow={shoModalCar} onClose={()=>setShowModalCar(false)} />
-				<ModalLiveChat isShow={shoModalLiveChat} onClose={(e)=>prosesModal(e, "live-chat")} />
+				<ModalLiveChat userInfo={userInfo} isShow={shoModalLiveChat} /*onClose={(e)=>prosesModal(e, "live-chat")}*/ />
+				<ModalBooking userInfo={userInfo} isShow={showModalBooking} onClose={(e)=>prosesModal(e, "booking")} />
+				<ModalTestDrive userInfo={userInfo} isShow={showModalTestDrive} onClose={(e)=>prosesModal(e, "test-drive")} />
 			</main>
 		</DefaultLayout>
 	);
