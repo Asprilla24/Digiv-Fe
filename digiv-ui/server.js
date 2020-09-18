@@ -8,6 +8,7 @@ const bodyParser = require("body-parser");
 const compression = require('compression')
 const cookieParser = require('cookie-parser')
 const Cookies = require('js-cookie')
+//const postLogEs = require('./utils/elasticSearch')
 
 const axios = require('axios').default
 require('dotenv').config()
@@ -21,7 +22,7 @@ app.prepare().then(() => {
 	server.use(cookieParser())
 	server.use(bodyParser.json());
 	server.use(bodyParser.urlencoded({ extended: false }));
-	// server.get("/espush", postLogEs)
+//	server.get("/espush", postLogEs)
 	server.get("/health", (req, res) => {
 		res.json({ name: "digivapp.fe", healthy: true });
 	});

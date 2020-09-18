@@ -1,9 +1,72 @@
-import React, { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
+import React, { useState, useEffect } from "react";
+import { FormField, Select } from "@components/element/form";
+import digivApiServices from "@utils/httpRequest";
+import { Formik } from "formik";
+//import { validationReservationSchema } from "../scheme/validation";
+import debounce from "@utils/debounce";
 
 export default function modalBookingForm(props) {
-	const { message, isShow, onClose } = props;
+    const { dataUser, isShow, onClose, onSubmitTestDrive, errorTestDrive } = props;
+    const models = [
+		{ value: "pilihmodel", label: "--Pilih Model--" }
+	  ];
+	const types = [
+		{ value: "pilihtipe", label: "--Pilih Tipe--" }
+	  ];
+    const [userDataTestDrive, setUserDataTestDrive] = useState({
+		email: "",
+		password: "",
+		province: "",
+		city: "",
+		nomer_telp: "",
+		name: "",
+    });
+    
+	const { digivApi } = digivApiServices();
+	const [provinceList, setProvinceList] = useState([]);
+    const [cityList, setCityList] = useState([]);
+    const [modelList, setModelList] = useState([]);
+    const [typeList, setTypeList] = useState([]);
+
+    useEffect(() => {
+		if (dataUser) {
+			setUserDataTestDrive({
+				...userDataTestDrive,
+				...dataUser,
+			});
+		}
+	}, [dataUser]);
+
+	const handleChangeProvince = debounce(async (keyword) => {
+		const searchKeyword = keyword;
+		try {
+			const getProvinceData = await digivApi.get(
+				`api/province?keyword=${searchKeyword}`,
+			);
+			const provinceData = getProvinceData.data.data;
+			if (provinceData) {
+				setProvinceList(provinceData);
+			}
+		} catch (err) {
+			throw err;
+		}
+	}, 1500);
+
+	const handelChangeCity = debounce(async (provinceId, keyword) => {
+		const searchKeyword = keyword;
+		try {
+			const getCityByProvince = await digivApi.get(
+				`api/city?province_id=${provinceId}&keyword=${searchKeyword}`,
+			);
+			const cityData = getCityByProvince.data.data;
+			if (cityData) {
+				setCityList(cityData);
+			}
+		} catch (err) {
+			throw err;
+		}
+    }, 1500);
+    
 	return (
 		<>
 			{isShow ? (
@@ -28,68 +91,77 @@ export default function modalBookingForm(props) {
 								</div>
 								{/*body*/}
 								<div className='  modal-car-content overflow-x-hidden overflow-y-auto p-6 flex-auto grid gap-4 grid-cols-1'>
-                                    <div class="flex flex-wrap -mx-3 mb-6">
-                                        <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                                        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
-                                            First Name
-                                        </label>
-                                        <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-first-name" type="text" placeholder="Jane" />
-                                        </div>
-                                        <div class="w-full md:w-1/2 px-3">
-                                        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
-                                            Last Name
-                                        </label>
-                                        <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text" placeholder="Doe" />
-                                        </div>
-                                    </div>
-                                    <div class="flex flex-wrap -mx-3 mb-6">
-                                        <div class="w-full px-3">
-                                        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-password">
-                                            Email
-                                        </label>
-                                        <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" type="email" placeholder="john.doe@mail.com" />
-                                        </div>
-                                    </div>
-                                    <div class="flex flex-wrap -mx-3 mb-6">
-                                        <div class="w-full px-3">
-                                        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-password">
-                                            Phone
-                                        </label>
-                                        <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" type="phone" placeholder="081234567890" />
-                                        </div>
-                                    </div>
-                                    <div class="flex flex-wrap -mx-3 mb-2">
-                                        <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                                            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-city">
-                                                Merk
-                                            </label>
-                                            <div class="relative">
-                                                <select class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
-                                                    <option>Honda</option>
-                                                    <option>Suzuki</option>
-                                                    <option>Toyota</option>
-                                                </select>
-                                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                                            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
-                                                Tipe
-                                            </label>
-                                            <div class="relative">
-                                                <select class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
-                                                    <option>Jazz</option>
-                                                    <option>H-RV</option>
-                                                    <option>C-RV</option>
-                                                </select>
-                                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
-                                                </div>
-                                            </div>
-                                        </div>
-								    </div>
+                                <Formik
+								>
+								{({ values, resetForm, handleSubmit }) => (
+                                <form onSubmit={handleSubmit}>
+										<div class="flex flex-wrap -mx-3 mb-6">
+											<div class="w-full md:w-2/2 px-3 mb-6 md:mb-0">
+											<FormField
+												name='fullname'
+												label='Fullname'
+												placeholder='Fullname'
+												class="appearance-none block w-full text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+												withLabel={false}
+											/> 
+											</div>
+										</div>
+										<div class="flex flex-wrap -mx-3 mb-6">
+											<div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+											<FormField
+												name='email'
+												label='Email Address'
+												placeholder='your@email.com'
+												class="appearance-none block w-full text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+												withLabel={false}
+											/>
+											</div>
+											<div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+											<FormField
+												name='phone'
+												label='Phone'
+												placeholder='08123456789'
+												class="appearance-none block w-full text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+												withLabel={false}
+											/> 
+											</div>
+										</div>
+
+										<div class="flex flex-wrap -mx-3 mb-6">
+											<div class="w-full md:w-2/2 px-3 mb-6 md:mb-0">
+											<Select
+												name="model"
+												label="Model"
+												placeholder="Pilih Model"
+												options={models}
+												withLabel={false}
+											/>
+											</div>
+										</div>
+
+										<div class="flex flex-wrap -mx-3 mb-6">
+											<div class="w-full md:w-2/2 px-3 mb-6 md:mb-0">
+											<Select
+												name="type"
+												label="Tipe"
+												placeholder="Pilih Tipe"
+												options={types}
+												withLabel={false}
+											/>
+											</div>
+										</div>
+										
+
+										<div className='w-full mt-8'>
+											<button
+												className=' w-full bg-yellow-500 text-white font-bold py-2 px-4 rounded'
+												type='submit'>
+												Request Test Drive
+											</button>
+										</div>
+									</form>
+                                    )}
+                                    </Formik>
                                 </div>
 								{/*footer*/}
 								<div className='grid grid-flow-col grid-cols-1 grid-rows-1 gap-1 modal-car-footer p-6 border-t border-solid border-gray-300 rounded-b'>

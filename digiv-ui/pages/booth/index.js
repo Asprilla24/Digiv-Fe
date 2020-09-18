@@ -8,6 +8,8 @@ export default function Booth() {
 		<div className='min-w-screen min-h-screen'>
 			<Head>
 				<title>Adira VirtualTour</title>
+				<script src='https://www.gstatic.com/firebasejs/7.20.0/firebase-app.js'></script>
+				<script src='https://www.gstatic.com/firebasejs/7.20.0/firebase-firestore.js'></script>
 			</Head>
 			<ModalProvider>
 				<BootPage />
